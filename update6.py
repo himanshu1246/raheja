@@ -1,0 +1,28 @@
+import os
+
+directory = r"d:\reheja universal"
+
+files_to_process = [
+    "index.html",
+    "privacy-policy.html",
+    "terms-conditions.html",
+    "thank-you.html",
+    "cookies-policy.html"
+]
+
+google_script_url = "https://script.google.com/macros/s/AKfycbzY3KfSEpb7NIhmUGYq94SzXchtIn9VyWi8nNzUFKT3P_vNyIV29QlDt7qW2oHy5co_uQ/exec"
+
+for fname in files_to_process:
+    path = os.path.join(directory, fname)
+    if not os.path.exists(path):
+        continue
+    
+    with open(path, 'r', encoding='utf-8') as f:
+        content = f.read()
+
+    content = content.replace('YOUR_GOOGLE_SCRIPT_URL_HERE', google_script_url)
+
+    with open(path, 'w', encoding='utf-8') as f:
+        f.write(content)
+
+print("Update 6 completed.")
