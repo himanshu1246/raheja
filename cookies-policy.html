@@ -736,10 +736,34 @@ function bindFormSubmit() {
       console.error('Local storage error:', err);
     }
 
-    // Simulate a brief delay to feel like a backend submit and redirect
-    setTimeout(function() {
-      window.location.href = 'thank-you.html';
-    }, 800);
+
+    const GOOGLE_SCRIPT_URL = "YOUR_GOOGLE_SCRIPT_URL_HERE";
+    
+    if (GOOGLE_SCRIPT_URL !== "YOUR_GOOGLE_SCRIPT_URL_HERE") {
+      const formData = new FormData();
+      formData.append('name', lead.name);
+      formData.append('phone', lead.phone);
+      formData.append('email', lead.email);
+      formData.append('country', lead.country);
+      formData.append('enquiry', lead.enquiry);
+      formData.append('timestamp', lead.timestamp);
+
+      fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        body: formData,
+        mode: 'no-cors'
+      }).then(function() {
+        window.location.href = 'thank-you.html';
+      }).catch(function(err) {
+        console.error('Submission failed:', err);
+        window.location.href = 'thank-you.html';
+      });
+    } else {
+      setTimeout(function() {
+        window.location.href = 'thank-you.html';
+      }, 800);
+    }
+
 
     function showError(message) {
       $errorSpan.text(message);
