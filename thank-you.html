@@ -242,40 +242,7 @@ input#modal_my_mobile{
       </div>
     </div>
 
-    <!-- Client-Side Captured Leads Viewer -->
-    <div style="max-width: 800px; margin: 50px auto 20px; padding: 0 15px; text-align: center;">
-      <button id="toggleLeadsBtn" class="btn btn-sm btn-outline-secondary" style="border: 1px solid #717376; font-size: 13px; color: #717376; padding: 6px 16px; border-radius: 20px; background: transparent; transition: all 0.3s ease;">
-        Show Captured Leads (Local)
-      </button>
-      
-      <div id="leadsConsole" style="display: none; margin-top: 25px; text-align: left; background: #1a1c20; color: #e0e0e0; border-radius: 10px; padding: 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.25); border: 1px solid #333;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #444; padding-bottom: 10px;">
-          <h3 style="margin: 0; font-size: 18px; color: #fff; font-weight: bold;">Local Lead Capture Database</h3>
-          <div>
-            <button id="exportCsvBtn" class="btn btn-sm btn-info" style="font-size: 11px; padding: 4px 10px; margin-right: 5px;">Export CSV</button>
-            <button id="clearLeadsBtn" class="btn btn-sm btn-danger" style="font-size: 11px; padding: 4px 10px; background-color: #dc3545; border-color: #dc3545;">Clear All</button>
-          </div>
-        </div>
-        <div style="overflow-x: auto;">
-          <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
-            <thead>
-              <tr style="border-bottom: 2px solid #555; color: #999;">
-                <th style="padding: 8px; text-align: left;">Name</th>
-                <th style="padding: 8px; text-align: left;">Phone</th>
-                <th style="padding: 8px; text-align: left;">Email</th>
-                <th style="padding: 8px; text-align: left;">Country</th>
-                <th style="padding: 8px; text-align: left;">Source</th>
-                <th style="padding: 8px; text-align: left;">Timestamp</th>
-              </tr>
-            </thead>
-            <tbody id="leadsTableBody">
-              <!-- Dynamically populated -->
-            </tbody>
-          </table>
-        </div>
-        <div id="noLeadsMsg" style="text-align: center; color: #888; padding: 20px 0; display: none;">No leads captured yet. Submit forms on index.html to populate.</div>
-      </div>
-    </div>
+
 
     <form><input type="hidden" id="hbemail" name="hbemail" value="" class="hbemailclass" ></form>
 </section>
@@ -381,7 +348,7 @@ input#modal_my_mobile{
                                             <span class="modal-highlight-title">We Promise</span>
                                             <ul class="modal-highlight">
                                                 <li><i class="mi mi-support-call"></i><span>Instant Call Back</span></li>
-                                                <li><i class="mi mi-support-visit"></i><span>Free Site Visit</span></li>
+
                                                 <li><i class="mi mi-support-price"></i><span>Unmatched Price</span></li>
                                             </ul>
                                         </div>
@@ -731,83 +698,7 @@ $(document).ready(function() {
         }, 1000); // 1-second delay for smooth load
     }
 
-    // 3. Leads Database Console Actions
-    function renderLeads() {
-        let leads = [];
-        try {
-            leads = JSON.parse(localStorage.getItem('captured_leads')) || [];
-        } catch(e) {
-            leads = [];
-        }
 
-        const tbody = $('#leadsTableBody');
-        tbody.empty();
-
-        if (leads.length === 0) {
-            $('#noLeadsMsg').show();
-        } else {
-            $('#noLeadsMsg').hide();
-            // Show latest first
-            leads.reverse().forEach(function(lead) {
-                tbody.append(`
-                    <tr style="border-bottom: 1px solid #333;">
-                        <td style="padding: 8px;">${lead.name || 'N/A'}</td>
-                        <td style="padding: 8px;">${lead.phone || 'N/A'}</td>
-                        <td style="padding: 8px;">${lead.email || 'N/A'}</td>
-                        <td style="padding: 8px;">${lead.country || 'India'}</td>
-                        <td style="padding: 8px; color: var(--colorPrimary);">${lead.enquiry || 'N/A'}</td>
-                        <td style="padding: 8px; color: #888;">${lead.timestamp || 'N/A'}</td>
-                    </tr>
-                `);
-            });
-        }
-    }
-
-    $('#toggleLeadsBtn').on('click', function() {
-        const consoleEl = $('#leadsConsole');
-        if (consoleEl.is(':visible')) {
-            consoleEl.slideUp();
-            $(this).text('Show Captured Leads (Local)');
-        } else {
-            renderLeads();
-            consoleEl.slideDown();
-            $(this).text('Hide Captured Leads');
-        }
-    });
-
-    $('#clearLeadsBtn').on('click', function() {
-        if (confirm('Are you sure you want to clear all locally saved leads?')) {
-            localStorage.removeItem('captured_leads');
-            renderLeads();
-        }
-    });
-
-    $('#exportCsvBtn').on('click', function() {
-        let leads = [];
-        try {
-            leads = JSON.parse(localStorage.getItem('captured_leads')) || [];
-        } catch(e) {
-            leads = [];
-        }
-
-        if (leads.length === 0) {
-            alert('No leads to export.');
-            return;
-        }
-
-        let csvContent = "data:text/csv;charset=utf-8,Name,Phone,Email,Country,Enquiry Source,Timestamp\n";
-        leads.forEach(function(lead) {
-            csvContent += `"${lead.name}","${lead.phone}","${lead.email}","${lead.country}","${lead.enquiry}","${lead.timestamp}"\n`;
-        });
-
-        const encodedUri = encodeURI(csvContent);
-        const link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
-        link.setAttribute("download", "captured_leads.csv");
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    });
 });
 </script>
 
