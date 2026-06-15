@@ -751,12 +751,12 @@ function bindFormSubmit() {
     
     // Convert to URL parameters for better compatibility with Apps Script no-cors
     const params = new URLSearchParams();
-    params.append('name', lead.name);
-    params.append('phone', lead.phone);
-    params.append('email', lead.email);
-    params.append('country', lead.country);
-    params.append('enquiry', lead.enquiry);
-    params.append('timestamp', lead.timestamp);
+    params.append('name', name ? name.trim() : "N/A");
+    params.append('phone', phone ? phone.trim() : "N/A");
+    params.append('email', email ? email.trim() : "N/A");
+    params.append('country', country || "India");
+    params.append('enquiry', enquiredFor || "N/A");
+    params.append('timestamp', new Date().toLocaleString());
 
     fetch(GOOGLE_SCRIPT_URL, {
       method: 'POST',
