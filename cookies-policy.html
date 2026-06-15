@@ -739,30 +739,28 @@ function bindFormSubmit() {
 
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzY3KfSEpb7NIhmUGYq94SzXchtIn9VyWi8nNzUFKT3P_vNyIV29QlDt7qW2oHy5co_uQ/exec";
     
-    if (GOOGLE_SCRIPT_URL !== "https://script.google.com/macros/s/AKfycbzY3KfSEpb7NIhmUGYq94SzXchtIn9VyWi8nNzUFKT3P_vNyIV29QlDt7qW2oHy5co_uQ/exec") {
-      const formData = new FormData();
-      formData.append('name', lead.name);
-      formData.append('phone', lead.phone);
-      formData.append('email', lead.email);
-      formData.append('country', lead.country);
-      formData.append('enquiry', lead.enquiry);
-      formData.append('timestamp', lead.timestamp);
+    // Convert to URL parameters for better compatibility with Apps Script no-cors
+    const params = new URLSearchParams();
+    params.append('name', lead.name);
+    params.append('phone', lead.phone);
+    params.append('email', lead.email);
+    params.append('country', lead.country);
+    params.append('enquiry', lead.enquiry);
+    params.append('timestamp', lead.timestamp);
 
-      fetch(GOOGLE_SCRIPT_URL, {
-        method: 'POST',
-        body: formData,
-        mode: 'no-cors'
-      }).then(function() {
-        window.location.href = 'thank-you.html';
-      }).catch(function(err) {
-        console.error('Submission failed:', err);
-        window.location.href = 'thank-you.html';
-      });
-    } else {
-      setTimeout(function() {
-        window.location.href = 'thank-you.html';
-      }, 800);
-    }
+    fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST',
+      body: params,
+      mode: 'no-cors',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    }).then(function() {
+      window.location.href = 'thank-you.html';
+    }).catch(function(err) {
+      console.error('Submission failed:', err);
+      window.location.href = 'thank-you.html';
+    });
 
 
     function showError(message) {
